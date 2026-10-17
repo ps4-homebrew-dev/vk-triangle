@@ -49,14 +49,16 @@ eboot.bin: eboot.elf
 	$(ELF2SELF)  $^ $@
 
 sce_sys/icon0.png:
+	@mkdir -p $(@D)
 	convert -size 512x512 -gravity center label:'$(TITLE)' $@
 
 sce_sys/param.sfo:
+	@mkdir -p $(@D)
 	$(MKSFO) -i APP_TYPE=1 \
 		 -s128 TITLE='$(TITLE)' \
 		 -s12 TITLE_ID=$(TITLE_ID) \
 		 -s48 CONTENT_ID=$(CONTENT_ID) \
-		 -s8 APP_VER=$(APP_VER) \
+		 -s8 APP_VER=$(VERSION) \
 		 -s8 VERSION=$(VERSION) \
 		 -i ATTRIBUTE=0 \
 		 -i DOWNLOAD_DATA_SIZE=0 \
@@ -65,12 +67,13 @@ sce_sys/param.sfo:
 		 $@
 
 sce_module/libvulkan.so.1: $(SYSROOT)/$(PREFIX)/lib/libvulkan.so.1
+	@mkdir -p $(@D)
 	$(ELF2SELF)  $^ $@
 
 $(CONTENT_ID).gp4: $(PKGFILES)
 	$(MKGP4) -c $(CONTENT_ID) -o $@ $^
 
-$(CONTENT_ID).pkg: $(CONTENT_ID).gp4 $(PKGFIKES)
+$(CONTENT_ID).pkg: $(CONTENT_ID).gp4 $(PKGFILES)
 	$(MKPKG) -o $@ $<
 
 clean:
