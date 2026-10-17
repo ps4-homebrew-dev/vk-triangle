@@ -1,0 +1,9 @@
+*~
+*.elf
+*.so
+eboot.bin
+sce_module/*.*
+sce_sys/*.*
+shaders/*.h
+*.gp4
+*.pkg
