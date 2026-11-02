@@ -4,11 +4,9 @@ on:
   push:
     paths-ignore:
       - "**/*.md"
-      - "**/*.txt"
   pull_request:
     paths-ignore:
       - "**/*.md"
-      - "**/*.txt"
   workflow_dispatch:
 
 jobs:
@@ -26,17 +24,18 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang-20 lld-20 llvm-20 glslang-tools imagemagick
+          sudo apt-get install -y clang-20 lld-20 llvm-20 glslang-tools
 
       - name: Build Homebrew
         run: |
-          make clean all PS4_HOMEBREW_SDK=/opt/ps4-homebrew-sdk
+          /opt/ps4-homebrew-sdk/bin/orbis-cmake -S . -B build
+          make -C build
 
       - name: Upload Homebrew
         uses: actions/upload-artifact@v4
         with:
           name: Homebrew
-          path: "*.pkg"
+          path: "build/*.pkg"
           if-no-files-found: error
 
   release:
